@@ -12,7 +12,10 @@ GameScene::GameScene()
     tempo.setFillColor(sf::Color(0, 0, 102, 255));
     tempo.setPosition({ 0.f, 0.f });
     tempo.setSize(kVirtualSizeF);
+
 }
+
+std::string hudMessage;
 
 void GameScene::handleEvent(sf::RenderWindow& window, const sf::Event& event)
 {
@@ -29,7 +32,27 @@ void GameScene::handleEvent(sf::RenderWindow& window, const sf::Event& event)
 
 void GameScene::update(sf::Time dt)
 {
-    //update logic
+    hudMessage.clear();
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+    {
+        hudMessage += "press left button\n";
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+    {
+        hudMessage += "press right button\n";
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+    {
+        hudMessage += "press up button\n";
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+    {
+        hudMessage += "press down button\n";
+    }
 }
 
 void GameScene::draw(sf::RenderWindow& window)
@@ -39,6 +62,7 @@ void GameScene::draw(sf::RenderWindow& window)
     // HUD
     std::string t;
 	t += "Hello World!\n";
+    t += hudMessage;
 
     hudFont.draw(window, t, { 12.f, 10.f });
 
