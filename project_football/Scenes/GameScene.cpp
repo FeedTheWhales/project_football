@@ -27,32 +27,35 @@ void GameScene::handleEvent(sf::RenderWindow& window, const sf::Event& event)
             requested = SceneTransition{ TransitionOp::Push, SceneType::Pause };
             return;
         }
+        
+    }
+    hudMessage.clear();
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+    {
+        hudMessage += "You are moving left!\n";
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+    {
+        hudMessage += "You are moving right!\n";
+
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+    {
+        hudMessage += "You are moving up!\n";
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+    {
+        hudMessage += "You are moving down!\n";
     }
 }
 
 void GameScene::update(sf::Time dt)
 {
-    hudMessage.clear();
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
-    {
-        hudMessage += "press left button\n";
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
-    {
-        hudMessage += "press right button\n";
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
-    {
-        hudMessage += "press up button\n";
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
-    {
-        hudMessage += "press down button\n";
-    }
+    
 }
 
 void GameScene::draw(sf::RenderWindow& window)
