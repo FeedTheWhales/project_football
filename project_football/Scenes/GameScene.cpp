@@ -120,11 +120,18 @@ void GameScene::resolvePlayerBallCollision()
 
     if (isHeadHit)
     {
-        // Strong upward kick + directional horizontal bias
         float horizKick = playerVel.x * Physics::HEAD_HORIZ_MUL
             + normal.x * Physics::HEAD_HORIZ_ADD;
 
-        m_ball.setVelocity({ horizKick, Physics::HEAD_BOUNCE_VY });
+        // Reflect the ball's current vertical speed with decay, like ground bounce
+        float incomingVy = std::abs(ballVel.y);
+        float newVy = -(incomingVy * Physics::BALL_BOUNCE);
+        if (std::abs(newVy) < Physics::MIN_BOUNCE_VY)
+            newVy = 0.f;
+
+        newVy = std::max(newVy, Physics::HEAD_BOUNCE_VY);
+
+        m_ball.setVelocity({ horizKick, newVy });
         m_player.onHeadBall();
     }
     else
