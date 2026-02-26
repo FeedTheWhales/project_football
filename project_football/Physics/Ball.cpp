@@ -41,6 +41,17 @@ void Ball::update(sf::Time dt)
             m_vel.y = 0.f;
     }
 
+    // Ceiling Bounce
+    const float ceilingBottom = RADIUS;
+    if (m_pos.y <= ceilingBottom)
+    {
+        m_pos.y = ceilingBottom;
+        m_vel.y = std::abs(m_vel.y) * Physics::BALL_BOUNCE;
+        if (std::abs(m_vel.y) < Physics::MIN_BOUNCE_VY)
+            m_vel.y = 0.f;
+    }
+
+
 	// ---- Wall bounce ----
     if (m_pos.x < RADIUS)
     {
