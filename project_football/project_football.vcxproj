@@ -138,6 +138,8 @@
   <ItemGroup>
     <ClCompile Include="Core\SceneFactory.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Physics\Ball.cpp" />
+    <ClCompile Include="Physics\Player.cpp" />
     <ClCompile Include="Scenes\GameScene.cpp" />
     <ClCompile Include="Scenes\LoadingScene.cpp" />
     <ClCompile Include="Scenes\MenuScene.cpp" />
@@ -148,6 +150,10 @@
     <ClInclude Include="Core\SceneFactory.hpp" />
     <ClInclude Include="Core\VirtualResolution.hpp" />
     <ClInclude Include="Game\BitMapFont.hpp" />
+    <ClInclude Include="Physics\Ball.hpp" />
+    <ClInclude Include="Physics\Physics.hpp" />
+    <ClInclude Include="Physics\PhysicsUtils.hpp" />
+    <ClInclude Include="Physics\Player.hpp" />
     <ClInclude Include="Scenes\GameScene.hpp" />
     <ClInclude Include="Scenes\LoadingScene.hpp" />
     <ClInclude Include="Scenes\MenuScene.hpp" />
