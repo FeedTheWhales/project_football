@@ -12,6 +12,11 @@ namespace Physics
     constexpr float PLAYER_JUMP = -700.f;
     constexpr float KICK_POWER = 3.0f;
 
+    // Goal
+    constexpr float GOAL_HEIGHT = 80.f;   // opening height from ground surface
+    constexpr float GOAL_DEPTH  = 20.f;   // how far the frame sticks out from the wall
+    constexpr float GOAL_POST   = 5.f;    // post / crossbar thickness
+
     // Ball
     constexpr float BALL_BOUNCE = 0.72f;   // energy kept on ground bounce
     constexpr float BALL_FRICTION = 0.985f;  // horizontal damping multiplier per frame

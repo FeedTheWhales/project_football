@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Rect.hpp>
 #include <cmath>
+#include <algorithm>
 
 namespace PhysicsUtils
 {
@@ -27,6 +29,28 @@ namespace PhysicsUtils
     // Returns true when two circles overlap.
     // outNormal  : unit vector pointing FROM b TO a  (push direction for a).
     // outPenetration : overlap depth in pixels.
+
+    // Returns true when a circle overlaps an axis-aligned rectangle.
+    // outNormal     : unit vector pointing away from the rect surface (push direction for circle).
+    // outPenetration: overlap depth in pixels.
+    inline bool circleVsAABB(
+        sf::Vector2f circlePos, float radius,
+        sf::FloatRect rect,
+        sf::Vector2f& outNormal,
+        float& outPenetration)
+    {
+        float cx = std::clamp(circlePos.x, rect.position.x, rect.position.x + rect.size.x);
+        float cy = std::clamp(circlePos.y, rect.position.y, rect.position.y + rect.size.y);
+
+        sf::Vector2f delta = circlePos - sf::Vector2f{ cx, cy };
+        float dist = length(delta);
+
+        if (dist >= radius) return false;
+
+        outNormal      = (dist > 0.0001f) ? delta / dist : sf::Vector2f{ 0.f, -1.f };
+        outPenetration = radius - dist;
+        return true;
+    }
 
 	// Note: this does not handle the case of two circles in the same position (zero distance). 버그 생길 수도? 
     inline bool circleVsCircle(

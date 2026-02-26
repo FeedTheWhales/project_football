@@ -1,20 +1,31 @@
 #include "Player.hpp"
 #include "Physics.hpp"
 
-Player::Player(float startX, float startY)
-    : m_pos(startX, startY)
+Player::Player(int playerNum)
+    : m_playerNum(playerNum)
+    , m_pos(
+        playerNum == 1
+            ? sf::Vector2f(Physics::WINDOW_WIDTH * 0.25f, Physics::GROUND_Y - RADIUS)
+            : sf::Vector2f(Physics::WINDOW_WIDTH * 0.75f, Physics::GROUND_Y - RADIUS))
     , m_vel(0.f, 0.f)
-    , m_body(RADIUS)          
+    , m_body(RADIUS)
     , m_eyeL(5.f)
     , m_eyeR(5.f)
 {
-    // --- Body ---
-    m_body.setOrigin({ RADIUS, RADIUS });                          // sf::Vector2f
-    m_body.setFillColor(sf::Color(70, 130, 220));
-    m_body.setOutlineThickness(2.f);
-    m_body.setOutlineColor(sf::Color(30, 60, 160));
+    m_body.setOrigin({ RADIUS, RADIUS });
 
-    // --- Eyes ---
+    if (playerNum == 1)
+    {
+        m_body.setFillColor(sf::Color(70, 130, 220));
+        m_body.setOutlineColor(sf::Color(30, 60, 160));
+    }
+    else
+    {
+        m_body.setFillColor(sf::Color(220, 70, 70));
+        m_body.setOutlineColor(sf::Color(160, 30, 30));
+    }
+    m_body.setOutlineThickness(2.f);
+
     m_eyeL.setOrigin({ 5.f, 5.f });
     m_eyeL.setFillColor(sf::Color::White);
 
@@ -22,31 +33,41 @@ Player::Player(float startX, float startY)
     m_eyeR.setFillColor(sf::Color::White);
 }
 
+
 void Player::handleInput(sf::Time dt)
 {
     float moveX = 0.f;
-	// Check for left/right movement keys
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-        moveX -= Physics::PLAYER_SPEED;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-        moveX += Physics::PLAYER_SPEED;
-
-    m_vel.x = moveX;
-
-    if (m_onGround)
+    if (m_playerNum == 1)
     {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) ||
-            sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) ||
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+            moveX -= Physics::PLAYER_SPEED;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+            moveX += Physics::PLAYER_SPEED;
+
+        if (m_onGround &&
             sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
         {
             m_vel.y = Physics::PLAYER_JUMP;
             m_onGround = false;
         }
     }
+    else
+    {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+            moveX -= Physics::PLAYER_SPEED;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+            moveX += Physics::PLAYER_SPEED;
 
+        if (m_onGround &&
+            sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+        {
+            m_vel.y = Physics::PLAYER_JUMP;
+            m_onGround = false;
+        }
+    }
+
+    m_vel.x = moveX;
     (void)dt;
 }
 
@@ -105,14 +126,15 @@ void Player::draw(sf::RenderWindow& window) const
 // Returns a rectangle in front of the player where they can kick the ball with their foot.
 sf::FloatRect Player::getKickZone() const
 {
-    // A rectangular zone to the right of the player.
-    // Width defines max kick range; height is forgiving vertically.
-    constexpr float zoneWidth = 55.f;
+    constexpr float zoneWidth  = 55.f;
     constexpr float zoneHeight = 40.f;
 
+    float zoneX = (m_playerNum == 2)
+        ? m_pos.x - RADIUS - zoneWidth   // Player 2: zone to the left
+        : m_pos.x + RADIUS;              // Player 1: zone to the right
+
     return sf::FloatRect(
-        { m_pos.x + RADIUS,                    // starts at the player's right edge
-         m_pos.y - zoneHeight / 2.f },         // vertically centered on player
+        { zoneX, m_pos.y - zoneHeight / 2.f },
         { zoneWidth, zoneHeight }
     );
 }

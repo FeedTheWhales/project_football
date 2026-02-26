@@ -53,12 +53,15 @@ void Ball::update(sf::Time dt)
 
 
 	// ---- Wall bounce ----
-    if (m_pos.x < RADIUS)
+    // Skip bounce when the ball is in the goal-height zone so it can enter the net
+    const bool inGoalZone = (m_pos.y >= Physics::GROUND_Y - Physics::GOAL_HEIGHT);
+
+    if (m_pos.x < RADIUS && !inGoalZone)
     {
         m_pos.x = RADIUS;
         m_vel.x = std::abs(m_vel.x) * 0.7f;
     }
-    if (m_pos.x > Physics::WINDOW_WIDTH - RADIUS)
+    if (m_pos.x > Physics::WINDOW_WIDTH - RADIUS && !inGoalZone)
     {
         m_pos.x = Physics::WINDOW_WIDTH - RADIUS;
         m_vel.x = -std::abs(m_vel.x) * 0.7f;

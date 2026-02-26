@@ -27,15 +27,31 @@ private:
     BitmapFont hudFont;
 private: 
     void resolvePlayerBallCollision();
+    void resolvePlayerPlayerCollision();
+    void resolveGoalPostCollision();
     void resolveKick();
+    void checkGoal();
+    void resetPositions();
 
-    bool  m_kickedThisPress = false;
+    bool  m_kickedThisPress[2] = { false, false };
 
-    Player m_player;
+    int   m_score1 = 0;
+    int   m_score2 = 0;
+
+    Player m_player1;
+    Player m_player2;
     Ball   m_ball;
 
     sf::RectangleShape m_sky;
     sf::RectangleShape m_ground;
+
+    // Goal visuals: net background, crossbar, field-side post (x2 for each side)
+    sf::RectangleShape m_goalLeftNet;
+    sf::RectangleShape m_goalLeftCrossbar;
+    sf::RectangleShape m_goalLeftPost;
+    sf::RectangleShape m_goalRightNet;
+    sf::RectangleShape m_goalRightCrossbar;
+    sf::RectangleShape m_goalRightPost;
 };
 
 // 공차기 공식
